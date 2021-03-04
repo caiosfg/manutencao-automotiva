@@ -1,38 +1,55 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Carros;
+
+
 
 class CarrosController extends Controller
 {
-    public function __construct()
+
+    private $model;
+
+    public function __construct(Carros $carros)
     {
-        
+        $this->model = $carros;
     }
     
     public function getAll()
     {
-        return "get All";
+        $carros = $this->model->all();
+
+       return response()->json($carros);
     }
 
     public function get($id)
     {
-        return "get {$id}";
+       $carro = $this->model->find($id);
+
+       return response()->json($carro);
     }
 
     public function store(Request $request)
     {
-        dd($request->all());
+        $carro = $this->model->create($request->all());
+
+        return response()->json($carro);
     }
 
     public function update($id, Request $request)
     {
-        dd($id, $request->all());
+        $carro = $this->model->find($id)
+               ->update($request->all());
+
+        return response()->json($carro);
     }
 
     public function destroy($id)
     {
-        dd($id);
+        $carro = $this->model->find($id)
+               ->delete();
+        
+        return response()->json(data: null);
     }
 }
